@@ -240,7 +240,7 @@ class _SensorLoggerScreenState extends State<SensorLoggerScreen> {
         backgroundColor: const Color(0xFF2D2D44),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // Label sesi
@@ -328,7 +328,7 @@ class _SensorLoggerScreenState extends State<SensorLoggerScreen> {
             ),
           ],
 
-          const Spacer(),
+          const SizedBox(height: 24),
 
           // Tombol
           SizedBox(
