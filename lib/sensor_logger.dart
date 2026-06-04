@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 // ============================================================
@@ -203,8 +203,15 @@ class _SensorLoggerScreenState extends State<SensorLoggerScreen> {
     setState(() { _logging = false; _status = 'Menyimpan...'; });
 
     try {
-      final dir   = await getApplicationDocumentsDirectory();
-      final logDir = Directory('${dir.path}/sensor_logs');
+      // Minta permission storage (wajib Android 10 ke bawah)
+      // Android 11+: perlu MANAGE_EXTERNAL_STORAGE di manifest
+      final status = await Permission.manageExternalStorage.request();
+      if (!status.isGranted) {
+        setState(() => _status = '❌ Permission storage ditolak.\nBuka Pengaturan → Izin → File & Media → Izinkan.');
+        return;
+      }
+
+      final logDir = Directory('/storage/emulated/0/Documents/sensor_loggers');
       if (!await logDir.exists()) await logDir.create(recursive: true);
 
       final ts = DateTime.now().toIso8601String()
