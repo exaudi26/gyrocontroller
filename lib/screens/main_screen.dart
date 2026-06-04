@@ -4,6 +4,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import '../services/complementary_filter.dart';
 import '../services/swing_detector.dart';
 import '../services/udp_service.dart';
+import '../sensor_logger.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -133,6 +134,10 @@ class _MainScreenState extends State<MainScreen> {
               _isConnected ? _disconnect : _connect),
           const SizedBox(height: 8),
           _btn('KALIBRASI', const Color(0xFFFFE66D), _isConnected ? _calibrate : null),
+          const SizedBox(height: 8),
+          _btn('SENSOR LOGGER', const Color(0xFFFF6B6B),
+            () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const SensorLoggerScreen()))),  
           const SizedBox(height: 22),
           _buildSensorPanel(),
           const SizedBox(height: 10),
