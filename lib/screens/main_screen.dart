@@ -4,6 +4,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import '../services/complementary_filter.dart';
 import '../services/swing_detector.dart';
 import '../services/udp_service.dart';
+import 'latency_logger.dart';
 import '../sensor_logger.dart';
 
 class MainScreen extends StatefulWidget {
@@ -135,9 +136,25 @@ class _MainScreenState extends State<MainScreen> {
           const SizedBox(height: 8),
           _btn('KALIBRASI', const Color(0xFFFFE66D), _isConnected ? _calibrate : null),
           const SizedBox(height: 8),
-          _btn('SENSOR LOGGER', const Color(0xFFFF6B6B),
-            () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const SensorLoggerScreen()))),  
+          Row(children: [
+            Expanded(
+              child: _btnOutline(
+                '🧪 Latency Logger',
+                const Color(0xFFFF6B6B),
+                () => Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => const LatencyLoggerScreen())),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _btnOutline(
+                '📊 Sensor Logger',
+                const Color(0xFF4ECDC4),
+                () => Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => const SensorLoggerScreen())),
+              ),
+            ),
+          ]),
           const SizedBox(height: 22),
           _buildSensorPanel(),
           const SizedBox(height: 10),
@@ -222,6 +239,19 @@ class _MainScreenState extends State<MainScreen> {
     Text('${value.toStringAsFixed(1)}°',
         style: TextStyle(color: color, fontSize: 17, fontWeight: FontWeight.bold)),
   ]);
+
+  Widget _btnOutline(String label, Color color, VoidCallback? fn) => SizedBox(
+    width: double.infinity,
+    child: OutlinedButton(
+      onPressed: fn,
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: color.withOpacity(0.7), width: 1.2),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Text(label, style: TextStyle(color: color, fontWeight: FontWeight.w600, fontSize: 12)),
+    ),
+  );
 
   Widget _btn(String label, Color color, VoidCallback? fn) => SizedBox(
     width: double.infinity,
